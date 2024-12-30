@@ -1,5 +1,6 @@
 import datetime
 import tempfile
+import uuid
 import numpy as np
 import matplotlib.pyplot as plt
 import japanize_matplotlib
@@ -148,7 +149,7 @@ def calculate(request):
     total_lack_funds = format_amount(total_lack_funds)
 
     # グラフの生成とアップロード
-    plot_filename = f"plot_{current_age}_{pension_start_age}_{expected_lifespan}.png"
+    plot_filename = f"plot_{current_age}_{pension_start_age}_{expected_lifespan}_{uuid.uuid4()}.png"
     plot_filepath = generate_plot(pension_income, shortfall, savings, years, plot_filename)
     upload_to_bucket(plot_filename, plot_filepath)
     plot_url = generate_public_url(bucket_name, plot_filename)
