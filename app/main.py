@@ -45,6 +45,8 @@ def format_amount(amount):
 
 # グラフを生成する関数
 def generate_plot(pension_income, shortfall, savings, years, filename):
+    """老後生活費の貯金・年金・不足分の積み上げ棒グラフを作成
+    """
     fig, ax = plt.subplots()
 
     # 積み上げ棒グラフの生成
@@ -53,12 +55,12 @@ def generate_plot(pension_income, shortfall, savings, years, filename):
     for i in range(len(years)):
         if savings[i] > 0:
             if savings[i] > shortfall[i]:
-                ax.bar(years[i], shortfall[i], bottom=pension_income[i], color='blue')
+                ax.bar(years[i], shortfall[i], bottom=pension_income[i], label='貯金切り崩し', color='blue')
             else:
-                ax.bar(years[i], savings[i], bottom=pension_income[i], color='blue')
-                ax.bar(years[i], shortfall[i] - savings[i], bottom=pension_income[i] + savings[i], color='red')
+                ax.bar(years[i], savings[i], bottom=pension_income[i], label='貯金切り崩し', color='blue')
+                ax.bar(years[i], shortfall[i] - savings[i], bottom=pension_income[i] + savings[i], label='資金不足分', color='red')
         else:
-            ax.bar(years[i], shortfall[i], bottom=pension_income[i], color='red')
+            ax.bar(years[i], shortfall[i], bottom=pension_income[i], label='資金不足分', color='red')
     # ラベルとタイトル
     ax.set_xlabel('年齢')
     ax.set_ylabel('金額（万円）')
@@ -67,7 +69,6 @@ def generate_plot(pension_income, shortfall, savings, years, filename):
     handles, labels = ax.get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     ax.legend(by_label.values(), by_label.keys())
-    # ax.legend(['年金収入', '貯金切り崩し', '資金不足分'])
 
     # 一時ファイルに画像を保存
     with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
